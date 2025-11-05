@@ -18,6 +18,10 @@ struct QuizView: View {
         quiz.questions[currentQuestionIndex]
     }
     
+    var passingScore: Int {
+        Int(Double(quiz.questions.count) * passingThreshold)
+    }
+    
     var body: some View {
         NavigationView {
             VStack(spacing: 20) {
@@ -115,7 +119,7 @@ struct QuizView: View {
                     VStack(spacing: 20) {
                         Spacer()
                         
-                        Image(systemName: score >= Int(Double(quiz.questions.count) * passingThreshold) ? "star.fill" : "star")
+                        Image(systemName: score >= passingScore ? "star.fill" : "star")
                             .font(.system(size: 80))
                             .foregroundColor(.yellow)
                         
@@ -131,7 +135,7 @@ struct QuizView: View {
                             .font(.title3)
                             .foregroundColor(.secondary)
                         
-                        if score >= Int(Double(quiz.questions.count) * passingThreshold) {
+                        if score >= passingScore {
                             Text("Great job! You've mastered this lesson!")
                                 .multilineTextAlignment(.center)
                                 .foregroundColor(.green)
@@ -206,7 +210,7 @@ struct QuizView: View {
                 showExplanation = false
             } else {
                 quizCompleted = true
-                if score >= Int(Double(quiz.questions.count) * passingThreshold) {
+                if score >= passingScore {
                     progressTracker.completeLesson(lessonId)
                 }
             }
